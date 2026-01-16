@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Usuarios</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Gestión de Usuarios</h1>
+            <p class="subtitle">Sistema de autenticación con JWT</p>
+        </header>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon"></div>
+                <h2>Registro</h2>
+                <p>Crea una nueva cuenta proporcionando tu nombre completo y correo electrónico.</p>
+                <a href="/login.html" class="btn btn-primary">Ir a Registro</a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"></div>
+                <h2>Inicio de Sesión</h2>
+                <p>Accede a tu cuenta con tu correo electrónico y contraseña.</p>
+                <a href="/login.html" class="btn btn-secondary">Iniciar Sesión</a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"></div>
+                <h2>Recuperar Contraseña</h2>
+                <p>¿Olvidaste tu contraseña? Solicita un enlace de recuperación por correo.</p>
+                <a href="/forgot.html" class="btn btn-tertiary">Recuperar</a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"></div>
+                <h2>Documentación API</h2>
+                <p>Explora todos los endpoints disponibles en la documentación interactiva Swagger.</p>
+                <a href="/swagger-ui.html" class="btn btn-accent" target="_blank">Ver Swagger UI</a>
+            </div>
+        </div>
+
+        <footer>
+            <div class="features">
+                <div class="feature">
+                    <strong>Registro de Usuarios</strong>
+                    <span>Con validación por email</span>
+                </div>
+                <div class="feature">
+                    <strong> Autenticación JWT</strong>
+                    <span>Tokens seguros de 24 horas</span>
+                </div>
+                <div class="feature">
+                    <strong>Recuperación de Contraseña</strong>
+                    <span>Tokens de un solo uso</span>
+                </div>
+                <div class="feature">
+                    <strong>API REST Completa</strong>
+                    <span>Documentada con Swagger</span>
+                </div>
+            </div>
+            <p class="copyright">Sistema desarrollado con Spring Boot 3.2.5 • Jorge © 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

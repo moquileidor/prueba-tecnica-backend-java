@@ -17,6 +17,7 @@ jwt.secret=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
 jwt.expiration=86400000
 
 # Mail Configuration
+# Para Gmail: https://myaccount.google.com/apppasswords
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=email-aqui@gmail.com

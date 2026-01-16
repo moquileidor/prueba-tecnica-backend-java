@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <div class="card">
+                <div class="card-icon"></div>
+                <h2 style="text-align: center; margin-bottom: 10px;">Restablecer Contraseña</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                    Ingresa tu nueva contraseña.
+                </p>
+                
+                <div id="message" class="message"></div>
+
+                <form onsubmit="handleResetPassword(event)">
+                    <div class="form-group">
+                        <label for="password">Nueva Contraseña</label>
+                        <input type="password" id="password" required placeholder="••••••••" minlength="6">
+                        <div class="password-strength" id="strength"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirmar Contraseña</label>
+                        <input type="password" id="confirm-password" required placeholder="••••••••" minlength="6">
+                    </div>
+                    <button type="submit" class="btn-submit">Restablecer Contraseña</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (!token) {
+            document.getElementById('message').textContent = ' Token inválido o faltante';
+            document.getElementById('message').className = 'message error';
+            document.getElementById('message').style.display = 'block';
+            document.querySelector('form').style.display = 'none';
+        }
+
+        document.getElementById('password').addEventListener('input', function(e) {
+            const password = e.target.value;
+            const strengthEl = document.getElementById('strength');
+            
+            if (password.length < 6) {
+                strengthEl.textContent = 'Muy débil (mínimo 6 caracteres)';
+                strengthEl.style.color = '#dc3545';
+            } else if (password.length < 8) {
+                strengthEl.textContent = 'Débil';
+                strengthEl.style.color = '#ffc107';
+            } else if (password.match(/[A-Z]/) && password.match(/[0-9]/)) {
+                strengthEl.textContent = 'Fuerte';
+                strengthEl.style.color = '#28a745';
+            } else {
+                strengthEl.textContent = ' Aceptable';
+                strengthEl.style.color = '#17a2b8';
+            }
+        });
+
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = 'message ' + type;
+            messageEl.style.display = 'block';
+        }
+
+        async function handleResetPassword(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                showMessage(' Las contraseñas no coinciden', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, newPassword: password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('Contraseña restablecida exitosamente. Redirigiendo al login...', 'success');
+                    setTimeout(() => window.location.href = '/login.html', 2000);
+                } else {
+                    showMessage('' + (data.message || 'Error al restablecer contraseña'), 'error');
+                }
+            } catch (error) {
+                showMessage(' Error de conexión con el servidor', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
